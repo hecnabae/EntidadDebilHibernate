@@ -3,12 +3,41 @@ Una entidad débil es aquélla que no puede identificarse mediante sus propios a
 
 ## Ejemplo
 
+Veamos el típico ejemplo que se da en cualquier biblioteca, en la que para cada libro, existen un número de ejemplares del mismo.
+
 ### Diseño lógico
 
 ```
-B(b0: dom_b0, ..., bn: dom_bn)  
-  Clave Primaria: {b0} 
-A(a0: dom_a0, ..., an: dom_an, b0: dom_b0, {r0: dom_r0})  
-  Clave Primaria: {b0, a0}  
-  Clave Ajena: {b0} hace referencia a B
+Libro(id, ...)  
+  Clave Primaria: {id} 
+Ejemplar(id, ..., libro_id)  
+  Clave Primaria: {libro_id, id}  
+  Clave Ajena: {libro_id} hace referencia a Libro
+```
+
+### Mapeo en Hibernate
+
+```
+@Entity
+@Table (name="libro")
+public class Libro implements Serializable {
+  @Id
+  @Column(name="id")
+  private Long id;
+  ...
+  @ElementCollection
+  @CollectionTable(
+    name="ejemplar",
+    joinColumns=@JoinColumn(name="libro_id")
+  )
+  private List<Ejemplar> ejemplares;
+  ...
+}
+  
+@Embeddable
+public class Ejemplar {
+  @Column(name="libro_id")
+  private Long libro_id;
+  ...
+}
 ```
