@@ -10,8 +10,8 @@ Veamos el típico ejemplo que se da en cualquier biblioteca, en la que para cada
 ```
 Libro(id, ...)  
   Clave Primaria: {id} 
-Ejemplar(id, ..., libro_id)  
-  Clave Primaria: {libro_id, id}  
+Ejemplar(num, ..., libro_id)  
+  Clave Primaria: {libro_id, num}  
   Clave Ajena: {libro_id} hace referencia a Libro
 ```
 
@@ -36,8 +36,8 @@ public class Libro implements Serializable {
   
 @Embeddable
 public class Ejemplar {
-  @Column(name="libro_id")
-  private Long libro_id;
+  @Column(name="num")
+  private Long num;
   ...
 }
 ```
